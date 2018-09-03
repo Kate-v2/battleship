@@ -41,11 +41,13 @@ class Board
   # --- Positions ---
 
   def possible_moves
-    arr = []
-    self.cols.each { |col|
-      self.rows.each { |char| arr << [char, col].join }
+    # Hmmm....
+    # rows.product(cols.to_s).join
+    # ...............
+    arr = self.cols.map { |col|
+      self.rows.map { |char| [char, col].join }
     }
-    arr.sort
+    arr.flatten.sort
   end
 
   def initialize_positions
