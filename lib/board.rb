@@ -41,14 +41,15 @@ class Board
   # --- Positions ---
 
   def possible_moves
-    rows = self.rows
-    cols = self.cols
-    arr = []
-    col = 0
-    cols.count.times { |t|
-      rows.each { |char| arr << [char, cols[col]].join }
-      col += 1
+    arr = []; #col = 0
+    self.cols.each { |col|
+      self.rows.each { |char| arr << [char, col].join }
+      # col += 1
     }
+    # self.cols.count.times {
+    #   self.rows.each { |char| arr << [char, cols[col]].join }
+    #   col += 1
+    # }
     arr.sort
   end
 
