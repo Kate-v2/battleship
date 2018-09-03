@@ -3,7 +3,7 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'minitest/auotrun'
+require 'minitest/autorun'
 require 'minitest/pride'
 
 require 'pry'
