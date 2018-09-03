@@ -25,7 +25,14 @@ class Board
 
   def possible_moves
     rows = self.rows
-    # matrix
+    cols = self.cols
+    arr = []
+    index = 0
+    cols.count.times { |t|
+      rows.each { |char| arr << [char, cols[index]].join }
+      index += 1
+    }
+    arr.sort
   end
 
   def rows

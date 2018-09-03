@@ -27,7 +27,12 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_create_an_array_of_all_possible_moves
-    skip
+    # skip
+    board = Board.new(2)
+    actual = board.possible_moves
+    expected = ["A1", "A2", "B1", "B2"]
+    # binding.pry
+    assert_equal expected, actual
   end
 
   def test_it_can_create_a_hash_of_the_board_status_at_each_position
