@@ -5,34 +5,27 @@ require 'pry'
 
 
 class Board
-  attr_reader :size, :current_board
+  attr_reader :size, :current_board, :index, :board_hash
 
   def initialize(size = 4)
     @size = size
+    @index = 0
     @current_board = []
-    # @current_board = [[" ", " ", " ", " "], [" ", " ", " ", " "], [" ", " ", " ", " "], [" ", " ", " ", " "]]
+
+    @board_hash = {}
+    @player_1_ships = {}
+    @player_2_ships = {}
   end
 
-  def blank_board
+
+  # --- New Board ---
+
+  def reset_game
     string = " " * @size
     array = string.chars
     @current_board.clear
     @size.times { |n| @current_board << array }
-    binding.pry
-  end
-
-
-
-  def possible_moves
-    rows = self.rows
-    cols = self.cols
-    arr = []
-    index = 0
-    cols.count.times { |t|
-      rows.each { |char| arr << [char, cols[index]].join }
-      index += 1
-    }
-    arr.sort
+    @index = 1
   end
 
   def rows
@@ -45,10 +38,38 @@ class Board
   end
 
 
+  # --- Positions ---
 
+  def possible_moves
+    rows = self.rows
+    cols = self.cols
+    arr = []
+    col = 0
+    cols.count.times { |t|
+      rows.each { |char| arr << [char, cols[col]].join }
+      col += 1
+    }
+    arr.sort
+  end
+
+  def initialize_positions
+    list = self.possible_moves
+    list.each {|coord|
+      key = coord.to_sym
+      @board_hash[key] = {is_boat: false, was_targetted: false}
+    }
+  end
 
 
   # --- Manipulating Board ---
+
+  def play
+    if @index == 0
+      self.reset_game
+    else
+      # Battleship.prompt
+    end
+  end
 
   def move(position)
     # find position

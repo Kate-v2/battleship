@@ -17,26 +17,17 @@ class BoardTest < Minitest::Test
     assert_equal 6, Board.new(6).size
   end
 
-  def test_it_can_create_a_blank_board
-    board_of_4 = Board.new
-    board_of_4.blank_board
+  # --- New Board ---
+
+  def test_it_can_reset_game
+    board = Board.new
+    board.reset_game
     # --- Rows --- (array of arrays)
-    assert_equal 4, board_of_4.current_board.count
+    assert_equal 4, board.current_board.count
     # --- Columns --- (array of column values)
-    assert_equal 4, board_of_4.current_board[1].count
-  end
-
-  def test_it_can_create_an_array_of_all_possible_moves
-    # skip
-    board = Board.new(2)
-    actual = board.possible_moves
-    expected = ["A1", "A2", "B1", "B2"]
-    # binding.pry
-    assert_equal expected, actual
-  end
-
-  def test_it_can_create_a_hash_of_the_board_status_at_each_position
-    skip
+    assert_equal 4, board.current_board[1].count
+    # --- Index of moves ---
+    assert_equal 1, board.index
   end
 
   def test_it_can_create_row_headers_based_on_size
@@ -46,6 +37,31 @@ class BoardTest < Minitest::Test
   def test_it_can_create_column_headers_based_on_size
     assert_equal [1, 2, 3, 4], Board.new.cols
   end
+
+  # --- Positions ---
+
+  def test_it_can_create_an_array_of_all_possible_moves
+    board = Board.new(2)
+    actual = board.possible_moves
+    expected = ["A1", "A2", "B1", "B2"]
+    # binding.pry
+    assert_equal expected, actual
+  end
+
+  def test_it_can_create_a_hash_of_the_board_status_at_each_position
+    board = board = Board.new(2)
+    board.initialize_positions
+    default_hash = {is_boat: false, was_targetted: false}
+    expected = {
+      A1: default_hash,
+      A2: default_hash,
+      B1: default_hash,
+      B2: default_hash
+    }
+    assert_equal expected, board.board_hash
+  end
+
+
 
   # --- Manipulating Board ---
 
