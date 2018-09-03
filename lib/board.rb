@@ -44,10 +44,9 @@ class Board
     # Hmmm....
     # rows.product(cols.to_s).join
     # ...............
-    arr = self.cols.map { |col|
+    self.cols.map { |col|
       self.rows.map { |char| [char, col].join }
-    }
-    arr.flatten.sort
+    }.flatten.sort
   end
 
   def initialize_positions
