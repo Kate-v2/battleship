@@ -44,14 +44,13 @@ class BoardTest < Minitest::Test
     board = Board.new(2)
     actual = board.possible_moves
     expected = ["A1", "A2", "B1", "B2"]
-    # binding.pry
     assert_equal expected, actual
   end
 
   def test_it_can_create_a_hash_of_the_board_status_at_each_position
     board = board = Board.new(2)
     board.initialize_positions
-    default_hash = {is_boat: false, was_targetted: false}
+    default_hash = {is_ship: false, was_targetted: false}
     expected = {
       A1: default_hash,
       A2: default_hash,
@@ -72,6 +71,15 @@ class BoardTest < Minitest::Test
   def test_it_can_print_the_board
     skip
   end
+
+  def test_it_can_assess_rows_for_hits_or_misses
+    skip
+    board = Board.new(2)
+    # board.assess_rows
+    assert_equal [[" ", " "], [" ", " "]], board.assess_rows
+
+  end
+
 
   def test_it_can_build_rows_by_adding_row_headers_and_new_line_characters
     skip

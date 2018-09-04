@@ -50,10 +50,10 @@ class Board
   end
 
   def initialize_positions
-    list = self.possible_moves
-    list.each {|coord|
+    self.possible_moves.each {|coord|
       key = coord.to_sym
-      @board_hash[key] = {is_boat: false, was_targetted: false}
+      default = {is_ship: false, was_targetted: false}
+      @board_hash[key] = default
     }
   end
 
@@ -87,7 +87,8 @@ class Board
   def print_board #(current_board)
     # current_board is array of arrays
     # binding.pry  # @current_board is blank
-
+    # p "==========="
+    # p "==========="
     board = self.build_rows
     # binding.pry
     header = self.build_header
@@ -96,6 +97,29 @@ class Board
     # binding.pry
     return board
   end
+
+  def assess_rows
+    initialize_positions
+    visual = board_hash.map { |key, value|
+      # binding.pry
+      if value[:was_targetted] == true
+        # determine_hit
+        # will place miss or hit peg
+      else
+        " "
+      end
+    }
+    # NEED TO BREAK DOWN BY ROWS
+    # index --- if index % size == 0 "\n"
+
+    binding.pry
+    return visual
+    # return visual.combination(@size).to_a
+  end
+
+
+
+
 
   def build_rows #(current_board)
     row_lead = self.rows
@@ -134,6 +158,15 @@ class Board
 
   # p mat = Matrix[*current_board]
 
+# Game can hold players
+#   Players can each hold a board
+#   Players fill board
+# Game can print player1 feedback board
+# How many boards do I need to keep
+  # player boards with self boats (2 boards) ??
+  # player's targets
+    # can it be 1 board with 2 print filters
+    # DO YOU NEED TO TRACK where other player targetted?
 
 
 
