@@ -200,24 +200,81 @@ class BoardTest < Minitest::Test
     assert_equal true, board.print_board(:player_map).include?("#")
   end
 
-  def test_it_can_assign_display_characters
-    skip
+  def test_it_can_assign_board_visuals
+    board = Board.new(2)
+    board.initialize_positions
+    # -- Player Board --
+    board.anchor_ship(["A1", "A2"])
+    board.update_player_map("A1")   # --> hit
+    board.update_player_map("B1")   # --> miss
+    player_middle = ["H", "#", "M", " "]
+    assert_equal player_middle, board.assign_board(:player_map)
+    # -- Enemy Board --
+    board.update_enemy_map("A1", true)   # --> hit
+    board.update_enemy_map("B1", false)   # --> miss
+    enemy_middle = ["H", " ", "M", " "]
+    assert_equal enemy_middle, board.assign_board(:enemy_map)
   end
 
-  def test_it_can_create_a_display_character
-    skip
+  def test_it_can_get_display_characters
+    board = Board.new
+    board.initialize_positions
+
+    board.anchor_ship(["A1", "A2"])
+    board.update_player_map("A1")   # --> hit
+    board.update_player_map("B1")   # --> miss
+
+    positions = board.positions
+    pos1 = positions[:A1][:player_map]
+    pos2 = positions[:B1][:player_map]
+    pos3 = positions[:A2][:player_map]
+
+    hit = board.get_char(pos1)
+    miss = board.get_char(pos2)
+    ship = board.get_char(pos3)
+
+    assert_equal "H", hit
+    assert_equal "M", miss
+    assert_equal "#", ship
   end
 
   def test_it_can_build_rows_with_headers
-    skip
+    board = Board.new(2)
+    board.initialize_positions
+
+    # labels = board.create_positions.each_slice(2)
+    labels = [
+      ["A1", "A2"],
+      ["B1", "B2"]
+    ]
+
+    arr = board.build_rows(labels)
+
+    expected = [
+      ["A", "A1", "A2", "\n"],
+      ["B", "B1", "B2", "\n"]
+    ]
+
+    assert_equal expected, arr
   end
 
   def test_it_can_build_a_header_row_for_column_names
-    skip
+    board = Board.new(2)
+    board.initialize_positions
+    expected = [".", 1, 2, "\n"]
+    assert_equal expected, board.build_header
   end
 
   def test_it_can_build_a_string_version_of_the_board_to_print
-    skip
+    board = Board.new(2)
+    board.initialize_positions
+    arr = [
+      [".", 1, 2, "\n"],
+      ["A", "A1", "A2", "\n"],
+      ["B", "B1", "B2", "\n"]
+    ]
+    string = ". 1 2 \nA A1 A2 \nB B1 B2 \n"
+    assert_equal string, board.build_string(arr)
   end
 
 
@@ -327,30 +384,6 @@ class BoardTest < Minitest::Test
     assert_equal [:A1, :A2, :B1, :B2, :B3], player_hash.keys
     # binding.pry   # --> see hash stored at player_hash
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

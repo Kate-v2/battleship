@@ -1,12 +1,8 @@
 # Create Functionality for the Board Class
-
-
 require 'pry'
 
 require './lib/ship'
 require './lib/player'
-
-
 
 class Board
 
