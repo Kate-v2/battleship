@@ -4,6 +4,7 @@
 require 'pry'
 
 require './lib/ship'
+require './lib/player'
 
 
 
