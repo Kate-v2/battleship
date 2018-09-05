@@ -13,21 +13,72 @@ class PlayerTest < Minitest::Test
 
   def test_it_gets_attributes
     pc = Player.new(false)
+    pc2 = Player.new(false, [3, 3])
     human = Player.new(true)
     assert_equal false, pc.is_human
     assert_equal true, human.is_human
     assert_instance_of Board, pc.board
     assert_instance_of Board, human.board
+    assert_equal [2, 3], pc.ships
+    assert_equal [3, 3], pc2.ships
+  end
+
+  def test_it_starts_game
+    pc = Player.new(false)
+    pc.start_game
+    # details for each position are initialized
+    assert_equal 16, pc.board.positions.count
   end
 
 
   # --- Ship Placement ---
+
+  def test_it_can_place_all_ships
+    skip
+  end
+
+  def test_it_can_place_a_ship
+    skip
+  end
 
   def test_it_can_process_input_coordinates
     human = Player.new(true)
     arr = human.process_coordinates("A1 A2")
     assert_equal ["A1", "A2"], arr
   end
+
+  def test_it_can_determine_user_ship_placement_path
+    skip
+    # pc.placement_type
+  end
+
+
+  # --- Computer ----
+
+  def test_it_can_computer_place_ships
+    skip
+    pc = Player.new(false)
+    # FIND SHIPS objects or flags in Board
+  end
+
+
+  def test_it_can_print_to_screen_and_pass_turn
+    skip
+    # HOW TO TEST ??
+  end
+
+  def test_it_can_do_a_random_shot
+    pc = Player.new(false)
+    pc.start_game
+    coord = pc.random_shot
+    positions = pc.board.positions.keys
+    actual = positions.include?(coord)
+    assert_equal true, actual
+    assert_equal 1, [coord].flatten.count
+  end
+
+
+  # --- Prompt User ----
 
 
 
