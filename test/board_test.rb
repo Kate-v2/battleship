@@ -83,7 +83,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_anchor_ship
-    # skip
     # This probably belongs in a better section, maybe other class
     board = Board.new(2)
     board.initialize_positions
@@ -132,6 +131,62 @@ class BoardTest < Minitest::Test
     # TO DO - test shot HIT when we can place ships
   end
 
+
+  # --- Create Valid Placements ---
+
+  def test_it_can_create_possible_positions_for_a_ship
+    board = Board.new
+    board.initialize_positions
+
+    # -- no other ships --
+    choices_for_2 = board.possible_positions(2)
+    assert_equal 2, choices_for_2[0].count
+    assert_equal 3*4*2, choices_for_2.count
+
+    choices_for_3 = board.possible_positions(3)
+    assert_equal 3, choices_for_3[0].count
+    assert_equal 2*4*2, choices_for_3.count
+
+    # -- other ships exist --
+    board.anchor_ship(["A1", "A2"])
+    choices_for_3 = board.possible_positions(3)
+    assert_equal (2*4*2)-4, choices_for_3.count
+  end
+
+  def test_it_can_prevent_ship_overlap
+    board = Board.new
+    board.initialize_positions
+    # -- no other ships --
+    no_nil = board.prevent_overlap
+    actual = no_nil.any? { |set| set.include?(nil) }
+    assert_equal false, actual
+    # -- other ships exist --
+    board.anchor_ship(["A1", "A2"])
+    with_nil = board.prevent_overlap
+    actual = with_nil.any? { |set| set.include?(nil) }
+    assert_equal true, actual
+  end
+
+  def test_it_can_collect_sets
+    board = Board.new(2)
+    arr = [["A1", "A2"], ["B1", "B2"]]
+    sets = board.collect_sets(arr, 2)
+    assert_equal 4, sets.count
+  end
+
+  def test_it_can_loop_through_rows
+    board = Board.new(2)
+    arr = [["A1", "A2"], ["B1", "B2"]]
+    sets = board.loop_through_rows_for_sets(arr, 2)
+    assert_equal 2, sets.count
+  end
+
+  def test_it_can_identify_sets_by_row
+    board = Board.new(2)
+    row = ["A1", "A2"]
+    sets = board.identify_sets_by_row(row, 2, sets = [])
+    assert_equal 1, sets.count
+  end
 
 
 

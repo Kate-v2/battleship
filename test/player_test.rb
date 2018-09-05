@@ -37,9 +37,6 @@ class PlayerTest < Minitest::Test
     skip
   end
 
-  def test_it_can_place_a_ship
-    skip
-  end
 
   def test_it_can_process_input_coordinates
     human = Player.new(true)
