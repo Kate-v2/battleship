@@ -63,9 +63,6 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_initialize_positions_with_default_states
-    skip
-    # MUST REDO METHOD
-    #   MUST create nested array before trying to access key/value of it
     board = Board.new(2)
     positions = board.positions
     assert_equal empty = {}, positions
@@ -74,16 +71,58 @@ class BoardTest < Minitest::Test
     # # --- Demonstrate all details for one position
     assert_equal false, positions[:A1][:player_map][:shot]
     assert_equal false, positions[:A1][:player_map][:hit]
-    assert_equal nil, positions[:A1][:player_map][:ship]
+    assert_equal nil,   positions[:A1][:player_map][:ship]
     assert_equal false, positions[:A1][:enemy_map][:shot]
     assert_equal false, positions[:A1][:enemy_map][:hit]
-    assert_equal nil, positions[:A1][:enemy_map][:ship]
+    # assert_equal nil, positions[:A1][:enemy_map][:ship]
 
     # --- Demonstrate a detail for each other position
     assert_equal false, positions[:A2][:player_map][:shot]
-    assert_equal nil, positions[:B1][:player_map][:ship]
+    assert_equal nil,   positions[:B1][:player_map][:ship]
     assert_equal false, positions[:B2][:enemy_map][:hit]
   end
+
+  def test_it_can_position_ships
+    skip
+    # This probably belongs in a better section, maybe other class
+  end
+
+  def test_it_can_update_player_map_with_enemy_shots
+    skip  # see end for TO DO
+    board = Board.new(2)
+    positions = board.positions
+    board.initialize_positions
+    # -- Before hit --
+    assert_equal false, positions[:A1][:player_map][:shot]
+    # -- After hit --
+    board.update_player_map("A1")
+    assert_equal true, positions[:A1][:player_map][:shot]
+    assert_equal false, positions[:A1][:player_map][:hit]
+    # TO DO - test shot HIT when we can place ships
+  end
+
+  def test_it_can_update_actualizations_of_enemy_map
+    # skip # see end for TO DO
+    board = Board.new(2)
+    positions = board.positions
+    board.initialize_positions
+    # -- Before hit --
+    assert_equal false, positions[:A1][:enemy_map][:shot]
+    # -- After Miss --
+    success = false
+    board.update_enemy_map("A1", success)
+    assert_equal true, positions[:A1][:enemy_map][:shot]
+    assert_equal false, positions[:A1][:enemy_map][:hit]
+    # -- After hit --
+    success = true
+    board.update_enemy_map("A2", success)
+    assert_equal true, positions[:A2][:enemy_map][:shot]
+    assert_equal true, positions[:A2][:enemy_map][:hit]
+    # TO DO - test shot HIT when we can place ships
+  end
+
+
+
 
 
 end

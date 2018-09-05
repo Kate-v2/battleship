@@ -14,8 +14,6 @@ class Board
   def initialize(size = 4)
     @size = size
     @positions = {}
-    # example: positions[:A1][:enemy_map] => {shot: false, hit: false, ship: nil}
-    # example: positions[:A1][:player_map] => {shot: false, hit: false, ship: nil}
   end
 
 
@@ -40,15 +38,13 @@ class Board
 
   def initialize_positions
     create_positions.each {|pos|
-      key = pos.to_sym
-      # MUST BREAK THIS INTO MORE METHODS
-      # CANNOT initialize a new hash within the hash before a nested hash is established
-      @positions[key][:player_map] = {shot: false, hit: false, ship: nil}
-      @positions[key][:enemy_map] = {shot: false, hit: false, ship: nil}
+      @positions[pos.to_sym] = {
+        :player_map => {shot: false, hit: false, ship: nil},
+        :enemy_map => {shot: false, hit: false} # implied by a hit - , ship: nil
+      }
     }
   end
-  # TO DO - SHIP & HIT are redundant, especially for enemy_map
-      # HIT is stored in the ship
+  # TO DO -  HIT is stored in the ships, should it stay in this hash
 
   def position_ships
     # ship holds coordnates
@@ -63,19 +59,14 @@ class Board
     end
   end
 
-#  == FIX THIS ==============================================
-  def update_enemy_map(coord)
+  def update_enemy_map(coord, success)
+    # success is T/F
     position = @positions[coord.to_sym][:enemy_map]
     position[:shot] = true
-# TO DO --- ADD successful_hit method
-      # player or board???
-    if successful_hit
-      position[:hit] = true
-      position[:ship] = true
-    end
+    position[:hit] = true if success
   end
-#  ==========================================================
-
+  # TO DO --- ADD successful_hit method
+    # player or board???
 
 
 
