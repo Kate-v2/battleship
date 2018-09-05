@@ -167,10 +167,4 @@ end
 
 
 
-  # --- Shooting validation ---
-
-
-  # --- (PC) Random Shot ---
-
-
   # --- Human Shot ---
