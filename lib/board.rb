@@ -115,14 +115,15 @@ class Board
   end
 
 
-
-
-
-
-
-
-
   # --- Print Board ---
+
+  # char
+    # if player_map is ship
+    #   print #
+    # if player_map is hit
+    #   print "H"
+    # if player map = shot & hit == false
+    #   print "M"
 
 
 

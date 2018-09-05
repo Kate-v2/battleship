@@ -95,6 +95,7 @@ class BoardTest < Minitest::Test
     board.anchor_ship(["A1", "A2"])
     assert_instance_of Ship, position1[:player_map][:ship]
     assert_instance_of Ship, position2[:player_map][:ship]
+    assert_equal ["A1", "A2"], position1[:player_map][:ship].coordinates
   end
 
   def test_it_can_update_player_map_with_enemy_shots
