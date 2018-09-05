@@ -22,9 +22,6 @@ class Player
   def place_ships
     @ships.each { |size|
       coordinates = prompt_user
-      # MOVING method to Board class
-      # TO DO -- UPDATE TESTS
-      # place_ship(coordnates)
       @board.anchor_ship(coordnates)
     }
   end
@@ -33,14 +30,6 @@ class Player
   # CANNOT DO THIS because string will not be reassinged
   # MUST do one method for prompt_user and validate (on loop)
   # prompt_user will RETURN processed coordinates
-
-  # TO DO -- UPDATE TESTS
-  # MOVING method to Board class
-  # def place_ship(coordinates)
-  #   ship = Ship.new(coordinates)
-  #   @board.anchor_ship(ship)
-  # end
-
 
   def process_coordinates(string)
     [ string[0..1], string[3..4] ]
