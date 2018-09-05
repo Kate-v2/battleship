@@ -47,8 +47,13 @@ class Board
   end
   # TO DO -  HIT is stored in the ships, should it stay in this hash
 
-  def position_ships
-    # ship holds coordnates
+
+  def anchor_ship(coordinates)
+      ship = Ship.new(coordinates)
+      coordinates.each {|spot|
+        key = spot.to_sym
+        positions[key][:player_map][:ship] = ship
+      }
   end
 
   def update_player_map(coord)

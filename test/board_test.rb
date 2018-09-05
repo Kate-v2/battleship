@@ -82,9 +82,20 @@ class BoardTest < Minitest::Test
     assert_equal false, positions[:B2][:enemy_map][:hit]
   end
 
-  def test_it_can_position_ships
-    skip
+  def test_it_can_anchor_ship
+    # skip
     # This probably belongs in a better section, maybe other class
+    board = Board.new(2)
+    board.initialize_positions
+    position1 = board.positions[:A1]
+    position2 = board.positions[:A2]
+    # -- before --
+    assert_nil position1[:player_map][:ship]
+    assert_nil position2[:player_map][:ship]
+    # -- after --
+    board.anchor_ship(["A1", "A2"])
+    assert_instance_of Ship, position1[:player_map][:ship]
+    assert_instance_of Ship, position2[:player_map][:ship]
   end
 
   def test_it_can_update_player_map_with_enemy_shots

@@ -22,7 +22,10 @@ class Player
   def place_ships
     @ships.each { |size|
       coordinates = prompt_user
-      place_ship(coordnates)
+      # MOVING method to Board class
+      # TO DO -- UPDATE TESTS
+      # place_ship(coordnates)
+      @board.anchor_ship(coordnates)
     }
   end
   # string = prompt_placement
@@ -31,11 +34,12 @@ class Player
   # MUST do one method for prompt_user and validate (on loop)
   # prompt_user will RETURN processed coordinates
 
-
-  def place_ship(coordinates)
-    ship = Ship.new(coordinates)
-    @board.anchor_ship(ship)
-  end
+  # TO DO -- UPDATE TESTS
+  # MOVING method to Board class
+  # def place_ship(coordinates)
+  #   ship = Ship.new(coordinates)
+  #   @board.anchor_ship(ship)
+  # end
 
 
   def process_coordinates(string)
@@ -165,12 +169,6 @@ end
   # end
 
 
-
-
-  # --- Shooting validation ---
-
-
-  # --- (PC) Random Shot ---
 
 
   # --- Human Shot ---
