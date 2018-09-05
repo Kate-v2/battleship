@@ -99,37 +99,32 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_can_update_player_map_with_enemy_shots
-    skip  # see end for TO DO
     board = Board.new(2)
     positions = board.positions
     board.initialize_positions
-    # -- Before hit --
+    # -- Before hits --
     assert_equal false, positions[:A1][:player_map][:shot]
-    # -- After hit --
+    # -- After hits --
+    board.anchor_ship(["A1"])
     board.update_player_map("A1")
     assert_equal true, positions[:A1][:player_map][:shot]
-    assert_equal false, positions[:A1][:player_map][:hit]
-    # TO DO - test shot HIT when we can place ships
+    assert_equal true, positions[:A1][:player_map][:hit]
   end
 
   def test_it_can_update_actualizations_of_enemy_map
-    # skip # see end for TO DO
     board = Board.new(2)
     positions = board.positions
     board.initialize_positions
     # -- Before hit --
     assert_equal false, positions[:A1][:enemy_map][:shot]
     # -- After Miss --
-    success = false
-    board.update_enemy_map("A1", success)
+    board.update_enemy_map("A1", false)
     assert_equal true, positions[:A1][:enemy_map][:shot]
     assert_equal false, positions[:A1][:enemy_map][:hit]
     # -- After hit --
-    success = true
-    board.update_enemy_map("A2", success)
-    assert_equal true, positions[:A2][:enemy_map][:shot]
-    assert_equal true, positions[:A2][:enemy_map][:hit]
-    # TO DO - test shot HIT when we can place ships
+    board.update_enemy_map("A1", true)
+    assert_equal true, positions[:A1][:enemy_map][:shot]
+    assert_equal true, positions[:A1][:enemy_map][:hit]
   end
 
 
@@ -188,6 +183,173 @@ class BoardTest < Minitest::Test
     sets = board.identify_sets_by_row(row, 2, sets = [])
     assert_equal 1, sets.count
   end
+
+
+  # --- Print Board ---
+
+  def test_it_can_print_the_board
+    board = Board.new
+    board.initialize_positions
+    # -- Blank --
+    assert_equal String, board.print_board(:player_map).class
+    assert_equal String, board.print_board(:enemy_map).class
+    assert_equal false, board.print_board(:enemy_map).include?("#")
+    # -- With a ship --
+    board.anchor_ship(["A1", "A2"])
+    assert_equal String, board.print_board(:player_map).class
+    assert_equal true, board.print_board(:player_map).include?("#")
+  end
+
+  def test_it_can_assign_display_characters
+    skip
+  end
+
+  def test_it_can_create_a_display_character
+    skip
+  end
+
+  def test_it_can_build_rows_with_headers
+    skip
+  end
+
+  def test_it_can_build_a_header_row_for_column_names
+    skip
+  end
+
+  def test_it_can_build_a_string_version_of_the_board_to_print
+    skip
+  end
+
+
+  # --- Assess Progress ---
+
+  def test_it_can_count_moves_so_far
+    board = Board.new
+    board.initialize_positions
+    player = board.moves_so_far("player")
+    enemy = board.moves_so_far("computer")
+    # -- No moves --
+    assert_equal 0, player
+    assert_equal 0, enemy
+    # -- 1 shot each --
+    board.update_player_map("A1")         # --> enemy shot at player
+    board.update_enemy_map("A1", false)   # --> player shot at enemy
+    player = board.moves_so_far("player")
+    enemy = board.moves_so_far("computer")
+    assert_equal 1, player
+    assert_equal 1, enemy
+  end
+
+  def test_it_can_count_remaining_critical_hits_for_player_to_win
+    board = Board.new
+    board.initialize_positions
+    # -- assume enemy has same number of ship coords as player
+    board.anchor_ship(["A1", "A2"])
+    board.anchor_ship(["B1", "B2", "B3"])
+    # -- no hits yet --
+    moves = board.player_moves_to_win
+    assert_equal 5, moves
+    # -- two hits --
+    board.update_enemy_map("A1", true)
+    board.update_enemy_map("A2", true)
+    moves = board.player_moves_to_win
+    assert_equal 3, moves
+  end
+
+  def test_it_can_count_remaining_critical_hits_for_enemy_to_win
+    board = Board.new
+    board.initialize_positions
+    # -- anchor player ships
+    board.anchor_ship(["A1", "A2"])
+    board.anchor_ship(["B1", "B2", "B3"])
+    # -- no hits yet --
+    moves = board.enemy_moves_to_win
+    assert_equal 5, moves
+    # -- two hits --
+    board.update_player_map("A1")
+    board.update_player_map("A2")
+    moves = board.enemy_moves_to_win
+    assert_equal 3, moves
+  end
+
+  def test_it_can_count_remaining_targets
+    board = Board.new
+    board.initialize_positions
+    # -- assume enemy has same number of ship coords as player
+    board.anchor_ship(["A1", "A2"])
+    board.anchor_ship(["B1", "B2", "B3"])
+    # -- no hits yet --
+    player_moves = board.remaining_targets(:player_map)
+    enemy_moves = board.remaining_targets(:enemy_map)
+    assert_equal 5, player_moves
+    assert_equal 5, enemy_moves
+    # -- Player hit twice --
+    board.update_player_map("A1")
+    board.update_player_map("A2")
+    player_moves = board.remaining_targets(:player_map)
+    assert_equal 3, player_moves
+    # -- Enemy hit once --
+    board.update_enemy_map("A2", true)
+    enemy_moves = board.remaining_targets(:enemy_map)
+    assert_equal 4, enemy_moves
+  end
+
+  def test_it_can_get_all_hit_positions
+    board = Board.new
+    board.initialize_positions
+    # -- setup player board --
+    board.anchor_ship(["A1", "A2"])
+    board.anchor_ship(["B1", "B2", "B3"])
+    # -- hit player twice --
+    board.update_player_map("A1")
+    board.update_player_map("A2")
+    player_hash = board.critically_hit(:player_map)
+    assert_instance_of Hash, player_hash
+    assert_equal 2, player_hash.count
+    assert_equal [:A1, :A2], player_hash.keys
+    # binding.pry   # --> see hash stored at player_hash
+    # -- hit enemy once --
+    board.update_enemy_map("A2", true)
+    enemy_hash = board.critically_hit(:enemy_map)
+    assert_equal 1, enemy_hash.count
+    assert_equal [:A2], enemy_hash.keys
+  end
+
+  def testi_it_can_get_all_player_ships
+    board = Board.new
+    board.initialize_positions
+    # -- setup player board --
+    board.anchor_ship(["A1", "A2"])
+    board.anchor_ship(["B1", "B2", "B3"])
+    player_hash = board.find_all_player_ship_coordinates
+    assert_instance_of Hash, player_hash
+    assert_equal 5, player_hash.count
+    assert_equal [:A1, :A2, :B1, :B2, :B3], player_hash.keys
+    # binding.pry   # --> see hash stored at player_hash
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
