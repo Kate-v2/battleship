@@ -80,14 +80,40 @@ class Player
 
   # --- Prompt User ----
 
+  def prompt_shot
+    print "Target: "
+    # TO DO - This shouldn't print when pc plays
+    # TO DO - this needs to choose the random shot for pc
+    string = $stdin.gets.chomp
+    key = string.to_sym
+    found = @board.positions[key][:enemy_map][:shot] == false
+    if found
+      return true
+    else
+      print "You can't shoot there again"
+      prompt_shot
+    end
+    return string
+  end
 
 
+  def feedback(string)
+    key = string.to_sym
+    found = @board.positions[key][:enemy_map][:ship] != nil
+    found == true ? return true : return false
+  end
 
 
 
 
 
   # --- Ship Placement Validation ---
+
+  def place_ships
+    anchor = Anchor.new
+    anchor.assess_player(self)
+  end
+
 
 #   def validate_ship_placement(string, size)
 #     pick_random if string == "random"
